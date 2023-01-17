@@ -12,6 +12,9 @@ public class Ogrenci extends Kisi {
         this.sinif = sinif;
     }
 
+    public Ogrenci() {
+    }
+
     public int getNumara() {
         return numara;
     }
@@ -30,7 +33,7 @@ public class Ogrenci extends Kisi {
 
     @Override
     public String toString() {
-        return super.toString() +" "+ "numara=" + numara +
+        return super.toString() + " " + "numara=" + numara +
                 ", sinif='" + sinif;
     }
 }

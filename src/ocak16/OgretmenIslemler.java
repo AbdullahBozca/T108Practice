@@ -1,16 +1,19 @@
 package ocak16;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class OgretmenIslemler implements IIslemler {
     Scanner scan = new Scanner(System.in);
     static int sicilNo = 1000;
-    ArrayList<Ogretmen> ogretmenList = new ArrayList<>();
+
+    static ArrayList<Ogretmen> ogretmenList = new ArrayList<>();
+
 
     void ogrtMenu() {
-        System.out.println("============= İŞLEMLER =============\n" +
+        System.out.println("=============ÖĞRETMEN İŞLEMLERİ =============\n" +
                 "\t\t 1-EKLEME\n" +
                 "\t\t 2-ARAMA\n" +
                 "\t\t 3-LİSTELEME\n" +
@@ -18,8 +21,9 @@ public class OgretmenIslemler implements IIslemler {
                 "\t\t Q-ÇIKIŞ\n" +
                 "\n" +
                 "\tSEÇİMİNİZ:");
+        int secim = 0;
         try {
-            int secim = scan.nextInt();
+            secim = scan.nextInt();
             switch (secim) {
                 case 1: {
                     ekleme();
@@ -35,8 +39,8 @@ public class OgretmenIslemler implements IIslemler {
                 }
             }
         } catch (InputMismatchException e) {
-            String secim = scan.next();
-            if (secim.equalsIgnoreCase("q")) {
+            String kontrol = scan.next();
+            if (kontrol.equalsIgnoreCase("q")) {
                 AnaMenu anaMenu = new AnaMenu();
                 anaMenu.menu();
             } else {
@@ -63,21 +67,55 @@ public class OgretmenIslemler implements IIslemler {
         String bolum = scan.nextLine();
         Ogretmen ogretmen = new Ogretmen(ad, sAd, tcNo, yas, bolum, sicilNo++);
         ogretmenList.add(ogretmen);
+        listeleme();
 
     }
 
     @Override
     public void arama() {
+        System.out.print("ARANACAK KİŞİNİN TC NO SUNU GİRİNİZ: ");
+        String tcNo = scan.next();
+        int kontrol = 0;
+        for (Ogretmen each : ogretmenList) {
+            if (each.getTcNo().equals(tcNo)) {
+                System.out.println(each);
+                kontrol = 1;
+            }
+        }
+        if (kontrol == 0) {
+            System.out.println(tcNo + " TC NOLU KİŞİ BULUNMAMAKTADIR.");
+            ogrtMenu();
+        }
 
     }
 
     @Override
     public void listeleme() {
-
+        for (Ogretmen each : ogretmenList) {
+            System.out.println(each);
+        }
+        ogrtMenu();
     }
 
     @Override
     public void silme() {
+        System.out.print("SİLİNECEK KİŞİNİN TC NO SUNU GİRİNİZ: ");
+        String tcNo = scan.next();
+        boolean kontrol = false;
+
+        for (int i = 0; i < ogretmenList.size(); i++) {
+            if (ogretmenList.get(i).getTcNo().equals(tcNo)) {
+                System.out.println("SİLİNEN KİŞİ: " + ogretmenList.get(i));
+                ogretmenList.remove(i);
+                kontrol = true;
+                listeleme();
+                ogrtMenu();
+            }
+        }
+        if (!kontrol) { // if koşulu çalışabilmesi için koşulun true olması gerekiyor. Bu yüzden kontrol değili almış olduk
+            System.out.println(tcNo + " TC NOLU KİŞİ BULUNMAMAKTADIR.");
+            ogrtMenu();
+        }
 
     }
 }
